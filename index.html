@@ -1,0 +1,121 @@
+<!--
+
+
+    Hello,
+
+    I'm Ian Pearce.
+
+    I'm a freelance developer living in San Francisco, CA.
+
+    I'm currently developing sociological research tools
+    for the Center for Institutional and Social Change at
+    Columbia University (changecenter.org).
+
+    Before that, I was designing robot friends at the
+    Pacific Social Architecting Corporation (pacsocial.com).
+
+    I'm always looking for more cool stuff to work on.
+    Drop me a line!
+
+    ian@ianpearce.org
+    twitter.com/peeinears
+    github.com/peeinears
+
+
+-->
+
+<!doctype html>
+<html>
+  <head>
+
+    <title>Ian Pearce</title>
+
+    <script type="text/javascript" src="js/lib/bmp_lib.js"></script>
+    <script type="text/javascript" src="js/magiceye.js"></script>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-31194900-1']);
+      _gaq.push(['_setDomainName', 'ianpearce.org']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+    <!--[if IE]>
+      <script type="text/javascript">
+        // http://stackoverflow.com/questions/2790001/fixing-javascript-array-functions-in-internet-explorer-indexof-foreach-etc
+        if (!('map' in Array.prototype)) {
+          Array.prototype.map= function(mapper, that /*opt*/) {
+            var other= new Array(this.length);
+            for (var i= 0, n= this.length; i<n; i++)
+              if (i in this)
+                other[i]= mapper.call(that, this[i], i, this);
+            return other;
+          };
+        }
+      </script>
+    <![endif]-->
+
+    <style type="text/css">
+      html { cursor: pointer; }
+    </style>
+
+  </head>
+
+  <body>
+
+    <script type="text/javascript">
+
+      (function () {
+
+        var magicEye = new MagicEye();
+
+        magicEye.resize = function () {
+          this.width = (
+            window.innerWidth
+            || (document.documentElement && document.documentElement.clientWidth)
+            || (document.body && document.body.clientWidth)
+            || 0
+          );
+          this.height = (
+            window.innerHeight
+            || (document.documentElement && document.documentElement.clientHeight)
+            || (document.body && document.body.clientHeight)
+            || 0
+          );
+          return this;
+        };
+
+        magicEye.depthMap = [
+          "", "", "", "", "",
+
+          "      # # ### #   #   ### #      ",
+          "      # # #   #   #   # # #      ",
+          "      ### ### #   #   # # #      ",
+          "      # # #   #   #   # #        ",
+          "      # # ### ### ### ### #      ",
+
+          "", "", "", "", ""
+        ];
+
+        magicEye.resize();
+        magicEye.setupRender();
+        var src = bmp_lib.imageSource(magicEye.pixels, magicEye.palette);
+        document.body.style.backgroundImage = 'url(' + src + ')';
+        document.onmouseup = function () {
+          magicEye.resize();
+          magicEye.regeneratePalette().setupRender();
+          src = bmp_lib.imageSource(magicEye.pixels, magicEye.palette);
+          document.body.style.backgroundImage = 'url(' + src + ')';
+        };
+        window.magicEye = magicEye;
+      })();
+
+    </script>
+
+  </body>
+</html>
