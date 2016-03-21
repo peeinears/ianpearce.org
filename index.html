@@ -10,10 +10,77 @@
 
     -->
 
-    <title>Ian Pearce</title>
+    <title>ian pearce</title>
 
-    <script type="text/javascript" src="js/lib/bmp_lib.js"></script>
-    <script type="text/javascript" src="js/magiceye.js"></script>
+    <meta name="description" content="Please enjoy my website." />
+
+    <style type="text/css">
+      html { cursor: pointer; }
+    </style>
+
+  </head>
+
+  <body>
+
+    <script type="text/javascript" src="javascripts/magiceye.min.js"></script>
+    <script type="text/javascript" src="javascripts/TextDepthMapper.js"></script>
+
+    <script type="text/javascript">
+
+      (function () {
+
+        function renderMagicEye() {
+          var width = window.innerWidth
+              || (document.documentElement && document.documentElement.clientWidth)
+              || (document.body && document.body.clientWidth)
+              || 0;
+
+          var height = window.innerHeight
+              || (document.documentElement && document.documentElement.clientHeight)
+              || (document.body && document.body.clientHeight)
+              || 0;
+
+          var depthMapper = new MagicEye.TextDepthMapper('hello');
+          var depthMap = depthMapper.generate(width, height);
+
+          var pixelData = MagicEye.generatePixelData({
+            width: width,
+            height: height,
+            depthMap: depthMap,
+            colors: generatePalette(10)
+          });
+
+          var canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+
+          MagicEye.renderToCanvas(canvas, pixelData, width, height);
+
+          document.body.style.backgroundImage = 'url(' + canvas.toDataURL('image/png') + ')';
+        }
+
+        function randomRGBa() {
+          return [Math.floor(Math.random() * 256),
+                  Math.floor(Math.random() * 256),
+                  Math.floor(Math.random() * 256),
+                  255];
+        }
+
+        function generatePalette(numColors) {
+          var palette = [];
+          for (var i = 0; i < numColors; i++) {
+            palette.push(randomRGBa());
+          }
+          return palette;
+        }
+
+        document.onmouseup = renderMagicEye;
+
+        renderMagicEye();
+
+      })();
+
+    </script>
 
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -26,78 +93,5 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
     </script>
-
-    <!--[if IE]>
-      <script type="text/javascript">
-        // http://stackoverflow.com/questions/2790001/fixing-javascript-array-functions-in-internet-explorer-indexof-foreach-etc
-        if (!('map' in Array.prototype)) {
-          Array.prototype.map= function(mapper, that /*opt*/) {
-            var other= new Array(this.length);
-            for (var i= 0, n= this.length; i<n; i++)
-              if (i in this)
-                other[i]= mapper.call(that, this[i], i, this);
-            return other;
-          };
-        }
-      </script>
-    <![endif]-->
-
-    <style type="text/css">
-      html { cursor: pointer; }
-    </style>
-
-  </head>
-
-  <body>
-
-    <script type="text/javascript">
-
-      (function () {
-
-        var magicEye = new MagicEye();
-
-        magicEye.resize = function () {
-          this.width = (
-            window.innerWidth
-            || (document.documentElement && document.documentElement.clientWidth)
-            || (document.body && document.body.clientWidth)
-            || 0
-          );
-          this.height = (
-            window.innerHeight
-            || (document.documentElement && document.documentElement.clientHeight)
-            || (document.body && document.body.clientHeight)
-            || 0
-          );
-          return this;
-        };
-
-        magicEye.depthMap = [
-          "", "", "", "", "",
-
-          "      # # ### #   #   ### #      ",
-          "      # # #   #   #   # # #      ",
-          "      ### ### #   #   # # #      ",
-          "      # # #   #   #   # #        ",
-          "      # # ### ### ### ### #      ",
-
-          "", "", "", "", ""
-        ];
-
-        magicEye.resize();
-        magicEye.setupRender();
-        var src = bmp_lib.imageSource(magicEye.pixels, magicEye.palette);
-        document.body.style.backgroundImage = 'url(' + src + ')';
-        document.onmouseup = function () {
-          magicEye.resize();
-          magicEye.regeneratePalette().setupRender();
-          src = bmp_lib.imageSource(magicEye.pixels, magicEye.palette);
-          document.body.style.backgroundImage = 'url(' + src + ')';
-        };
-        window.magicEye = magicEye;
-      })();
-
-    </script>
-
   </body>
 </html>
